@@ -1,5 +1,7 @@
 package repository;
 
+import entity.Book;
+import entity.User;
 import entity.read;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,9 +13,13 @@ import java.util.List;
 public interface readRepository extends JpaRepository<read, Integer> {
 
     @Query("SELECT r from read r where r.endDate is not NULL")
-    public List<read> findCompletedBooks();
+    List<read> findCompletedBooks();
 
     @Query("SELECT r from read r where r.endDate is NULL")
-    public List<read> findUnfinishedBooks();
+    List<read> findUnfinishedBooks();
+
+    List<read> findByUser(User user);
+
+    List<read> findByBook(Book book);
 
 }
