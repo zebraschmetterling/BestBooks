@@ -25,4 +25,9 @@ public class SearchController {
         return api.search(q);
     }
 
+    @GetMapping("search-isbn/{isbn}")
+    public JSONObject searchISBN (@PathVariable String isbn) {
+        return api.searchISBN(isbn);
+    }
+
 }
