@@ -3,12 +3,15 @@ package api;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.regex.Pattern;
+
 import org.json.*;
 
 public class GoogleBooksApi {
 
     private final HttpClient client;
 
+    private static final Pattern NO_PLUS_MINUSES_BETWEEN_DIGITS = Pattern.compile("(?<=\\d)[+\\-](?=\\d)");
 
     public GoogleBooksApi() {
         client = HttpClient.newHttpClient();
@@ -59,6 +62,7 @@ public class GoogleBooksApi {
 
         //convert spaces to pluses to then insert to url
         String plus = q.replace(' ', '+');
+        plus = NO_PLUS_MINUSES_BETWEEN_DIGITS.matcher(plus).replaceAll("");
 
         return sendRequest(plus);
 
@@ -73,39 +77,44 @@ public class GoogleBooksApi {
             return failedRequest(true);
         }
 
-        //delete spaces to then insert to url
-        String spaces = isbn.replaceAll("\\s", "");
+        //delete spaces and minuses to then insert to url
+        String clean_isbn = isbn.replaceAll("[\\s-]", "");
         //add isbn parameter
-        String q = "isbn:" + spaces;
+        String q = "isbn:" + clean_isbn;
         return sendRequest(q);
     }
 
-    /** Searches the requested author and title using the Google book api. Only one parameter needed, other can be null.
+    /** Searches the requested author, title and/or isbn using the Google book api. Only one parameter needed, other can be null.
      * @param title title to be searched
      * @param author author to be searched
+     * @param isbn isbn to be searched
      * @return the api's response in Json format, empty Json object if request fails
      */
-    public JSONObject searchAdvanced (String title, String author) {
-        //convert spaces to pluses to then insert to url
+    public JSONObject searchAdvanced (String title, String author, String isbn) {
 
         boolean exitsTitle = true;
         boolean exitsAuthor = true;
+        boolean exitsISBN = true;
 
 
+        //check for existing params
         if (title == null || title.isBlank()) {
             exitsTitle = false;
         }
         if (author == null || author.isBlank()) {
             exitsAuthor = false;
         }
-        if (!exitsTitle && !exitsAuthor) {
+        if (isbn == null || isbn.isBlank()) {
+            exitsISBN = false;
+        }
+        if (!exitsTitle && !exitsAuthor && !exitsISBN) {
             return failedRequest(true);
         }
 
         StringBuilder builder = new StringBuilder();
 
         //convert spaces to pluses to then insert to url
-        //add parameters
+        //add parameters to search string
         if(exitsTitle) {
             String title_plus = title.replace(' ', '+');
             builder.append("intitle:").append(title_plus);
@@ -114,6 +123,13 @@ public class GoogleBooksApi {
         if(exitsAuthor) {
             String author_plus = author.replace(' ', '+');
             builder.append("+inauthor:").append(author_plus);
+
+        }
+        if(exitsISBN) {
+            //delete spaces and minuses to then insert to url
+            String isbn_clean = isbn.replaceAll("[\\s-]", "");
+            //add isbn parameter
+            builder.append("+isbn:").append(isbn_clean);
 
         }
 
