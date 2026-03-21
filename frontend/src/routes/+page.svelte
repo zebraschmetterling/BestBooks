@@ -1,6 +1,11 @@
 <script lang="ts">
-    import NavigationBar from "$lib/NavigationBar.svelte";
 </script>
 
-<h1>home</h1>
-<NavigationBar/>
+<h1 class="greetings">Hello to BestBooks! </h1>
+
+<style>
+    .greetings {
+        padding-top: 10%;
+        text-align: center;
+    }
+</style>
