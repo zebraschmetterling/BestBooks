@@ -1,7 +1,5 @@
 <script lang="ts">
 
-
-import NavigationBar from "$lib/NavigationBar.svelte";
 </script>
 
 <h2 class="header">
@@ -46,4 +44,3 @@ import NavigationBar from "$lib/NavigationBar.svelte";
 <h4>
     Already have an account? Then login <a href="/login"> here </a>.
 </h4>
-<NavigationBar/>
