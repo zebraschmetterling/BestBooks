@@ -1,7 +1,5 @@
 <script lang="ts">
 
-    import NavigationBar from "$lib/NavigationBar.svelte";
-
     type Book = {
         title : string
         subtitle? : string
@@ -30,7 +28,7 @@
     async function fetch_data () {
         searched = true
         loading = true
-        search_q.replaceAll("\\s", "+")
+        search_q = search_q.replaceAll("\\s", "+")
         const response = await fetch (`https://www.googleapis.com/books/v1/volumes?q=${search_q}`)//(`http://localhost:8080/search/${search_q}`)
         if(!response.ok) {
             console.error("Failed to fetch data")
@@ -51,7 +49,7 @@
 </script>
 
 <h1> Search</h1>
-<form on:submit|preventDefault={fetch_data}>
+<form ><!--on:submit|preventDefault={fetch_data}-->
     <input
             name="searchbar"
             type="text"
@@ -72,9 +70,9 @@
             <h5> An error occurred. Please try again. </h5>
         {:else}
             {#each books as book}
-                <a href="http://localhost:5173/search/{book.isbn}">
+                <a href="http://localhost:5173/search/{book.isbn}" class="link">
                     <b>{book.title}</b>
-                </a> {#if book.subtitle} – {book.subtitle} {/if}
+                {#if book.subtitle} – {book.subtitle} {/if} </a>
                 <br>
                 {book.authors}
                 <br><br>
@@ -84,6 +82,10 @@
     {/if}
 </div>
 
+<style>
+    .link {
+        text-decoration: none;
+        color: inherit;
+    }
 
-<br><br>
-<NavigationBar/>
+</style>

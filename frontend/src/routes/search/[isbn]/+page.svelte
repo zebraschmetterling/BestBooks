@@ -1,6 +1,5 @@
 <script lang="ts">
 
-    import NavigationBar from "$lib/NavigationBar.svelte";
     import { page } from "\$app/state";
     import {onMount} from "svelte";
 
@@ -8,7 +7,15 @@
 
     let loading : boolean = false
     let error : boolean = false
-    let book : Book
+    let book : Book = {
+        title : "Schachnovelle",
+        authors : "Stefan Zweig",
+        publishedDate : "2018-11-12",
+        pageCount : "46",
+        language : "de",
+        description : "Das berühmteste Werk von Stefan Zweig, die Schachnovelle, ist zugleich sein Letztes: Geschrieben von 1938 bis 1941 im brasilianischen Exil, erschien es zuerst in Buenos Aires in einer Auflage von 300 Exemplaren. Heute ist es ein millionenfacher Bestseller. Was als harmloses Schachspiel beginnt, wird zu einer Fabel über die Folgen diabolischer Foltermethoden. Stefan Zweig. Schachnovelle. Erstdruck: Verlag Pigmalión, Buenos Aires, 1942. Vollständige Neuausgabe, 1. Auflage, Göttingen 2018. LIWI Literatur- und Wissenschaftsverlag",
+        thumbnail : "http://books.google.com/books/content?id=Hnh7DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    }
 
     type Book = {
         title : string
@@ -253,7 +260,7 @@
         return lang[code] ?? code
     }
 
-    onMount(fetch_data)
+    //onMount(fetch_data)
 
 </script>
 <div>
@@ -263,20 +270,22 @@
         <h3> An error occurred. Please try again. </h3>
     {:else}
         {#if book}
-            <img src={book.thumbnail} alt="Book Cover"/>
-            <h2> {book.title} </h2>
-            {#if book.subtitle} <h3> {book.subtitle}</h3>{/if}
+            <div class="overview">
+                <img src={book.thumbnail} alt="Book Cover"/>
+                <h2> {book.title} </h2>
+                {#if book.subtitle} <h3> {book.subtitle}</h3>{/if}
 
-            <h3> {book.authors} </h3>
-
+                <h3> {book.authors} </h3>
+            </div>
             <br>
+            <div class="extra-info">
+                <h4>More Infos:</h4>
 
-            <h4>More Infos:</h4>
-
-            <b>Page count :</b> {book.pageCount} <br>
-            <b>Language :</b> {decodeLanguageCode(book.language)} <br>
-            <b>Published date :</b> {book.publishedDate} <br>
-            {#if book.description}<b>Description : </b> {book.description}<br> {/if}
+                <b>Page count :</b> {book.pageCount} <br>
+                <b>Language :</b> {decodeLanguageCode(book.language)} <br>
+                <b>Published date :</b> {book.publishedDate} <br>
+                {#if book.description}<b>Description : </b> {book.description}<br> {/if}
+            </div>
 
         {:else} <h3> Book could not be found</h3>
         {/if}
@@ -286,5 +295,14 @@
 
 
 
-<br> <br>
-<NavigationBar/>
+
+<style>
+
+    .overview {
+        text-align: center;
+    }
+
+    .extra-info {
+        line-height: 1.5;
+    }
+</style>
