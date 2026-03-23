@@ -49,6 +49,10 @@
 		padding: 8px;
 		background-color: gray;
 	}
+	:global .link {
+		text-decoration: none;
+		color: inherit;
+	}
 
 </style>
 
