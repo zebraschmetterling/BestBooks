@@ -5,6 +5,7 @@
 
     const isbn = page.params.isbn
 
+    let reading = false
     let loading : boolean = false
     let error : boolean = false
     let book : Book = {
@@ -260,6 +261,17 @@
         return lang[code] ?? code
     }
 
+    function startReading(){
+        reading = true
+        /*todo implement*/
+
+    }
+    function finishedReading(){
+        reading = false
+        /*todo implement*/
+
+    }
+
     //onMount(fetch_data)
 
 </script>
@@ -277,6 +289,18 @@
 
                 <h3> {book.authors} </h3>
             </div>
+            <div class="reading-button">
+                {#if !reading}
+                    <button type="button" on:click={startReading}>
+                        Reading
+                    </button>
+                {:else}
+                    <button type="button" on:click={finishedReading}>
+                        Finished
+                    </button>
+                {/if}
+            </div>
+
             <br>
             <div class="extra-info">
                 <h4>More Infos:</h4>
@@ -299,6 +323,9 @@
 <style>
 
     .overview {
+        text-align: center;
+    }
+    .reading-button {
         text-align: center;
     }
 
