@@ -1,5 +1,11 @@
 <script lang="ts">
 
+    import {page} from "$app/state";
+    import {ArrowLeft} from "@lucide/svelte";
+    import {goto} from "$app/navigation";
+
+    const username = page.params.username
+
     type Book = {
         isbn : string
         title : string
@@ -15,8 +21,17 @@
 
     ]
 
+    function navProfile () {
+        goto(`/${username}`)
+    }
+
 </script>
 
+<div class="back">
+    <button type="button" on:click={navProfile}>
+        <ArrowLeft />
+    </button>
+</div>
 <h2> Books already read: </h2>
 <div class="book-collection">
     {#each readBooks as book}
@@ -37,6 +52,10 @@
 
 
 <style>
+    .back {
+        display: flex;
+        width: 40px;
+    }
     .book-collection {
         display: flex;
         flex-direction: column;
@@ -45,8 +64,6 @@
     .link {
         display: inline-block;
         margin-bottom: 25px;
-        text-decoration: none;
-        color: inherit;
     }
 
     .book {

@@ -15,7 +15,7 @@
     }
 
     function navProfile() {
-        goto("/profile")
+        goto("/testi2") /*todo: change to logged-in user*/
     }
 
     function navLogin() {
