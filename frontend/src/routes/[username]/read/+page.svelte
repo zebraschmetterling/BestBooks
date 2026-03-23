@@ -6,7 +6,7 @@
 
     const username = page.params.username
     let loading = false /*todo change to true once fetch_data is used*/
-    let error = true
+    let error = false
 
     type Book = {
         isbn : string
