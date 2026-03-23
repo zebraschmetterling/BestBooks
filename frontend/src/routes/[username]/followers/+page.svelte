@@ -6,6 +6,8 @@
     import {page} from "$app/state";
 
     const username = page.params.username
+    let loading = false /*todo change to true once fetch_data is used*/
+    let error = false
 
     type User = {
         username : string
@@ -17,6 +19,18 @@
         goto(`/${username}`)
     }
 
+    async function fetch_data(){
+        const response = await fetch("http://localhost:8080/") /*todo adjust url*/
+        if(!response.ok) {
+            console.error("Failed to fetch data")
+            error = true
+            loading = false
+        }
+        const data  = await response.json()
+        /* todo process data:
+        followers = */
+    }
+
 </script>
 
 <div class="back">
@@ -26,19 +40,27 @@
 
 </div>
 <h2 class="header"> Followers </h2>
-{#each followers as user}
-    <a href="/{user.username}" class="link">
-        <div class="user">
-            <div class="user-icon">
-                <CircleUserRound />
+{#if loading}
+    <br> <br>
+    <h3 class="loading"> Loading ... </h3>
+{:else if error}
+    <br> <br>
+    <h3 class="error"> An error occurred. Please try again. </h3>
+{:else}
+    {#each followers as user}
+        <a href="/{user.username}" class="link">
+            <div class="user">
+                <div class="user-icon">
+                    <CircleUserRound />
+                </div>
+                <div class="user-info">
+                    <b>{user.username}</b>
+                </div>
             </div>
-            <div class="user-info">
-                <b>{user.username}</b>
-            </div>
-        </div>
-    </a>
-    <br>
-{/each}
+        </a>
+        <br>
+    {/each}
+{/if}
 
 <style>
     .back {

@@ -5,6 +5,8 @@
     import {goto} from "$app/navigation";
 
     const username = page.params.username
+    let loading = false /*todo change to true once fetch_data is used*/
+    let error = false
 
     type Book = {
         isbn : string
@@ -25,6 +27,18 @@
         goto(`/${username}`)
     }
 
+    async function fetch_data(){
+        const response = await fetch("http://localhost:8080/") /*todo adjust url*/
+        if(!response.ok) {
+            console.error("Failed to fetch data")
+            error = true
+            loading = false
+        }
+        const data  = await response.json()
+        /* todo process data:
+        currentBooks = */
+    }
+
 </script>
 
 <div class="back">
@@ -33,22 +47,29 @@
     </button>
 </div>
 <h2> Books currently reading: </h2>
-<div class="book-collection">
-    {#each currentBooks as book}
-        <a href="/search/{book.isbn}" class="link">
-            <div class="book">
-                <div class="book-cover">
-                    <img src={book.thumbnail} alt="Book Cover" height="200px"/>
+{#if loading}
+    <br> <br>
+    <h3 class="loading"> Loading ... </h3>
+{:else if error}
+    <br> <br>
+    <h3 class="error"> An error occurred. Please try again. </h3>
+{:else}
+    <div class="book-collection">
+        {#each currentBooks as book}
+            <a href="/search/{book.isbn}" class="link">
+                <div class="book">
+                    <div class="book-cover">
+                        <img src={book.thumbnail} alt="Book Cover" height="200px"/>
+                    </div>
+                    <div class="book-info">
+                        <b>{book.title} </b> {#if book.subtitle} – {book.subtitle} {/if} <br>
+                        {book.author}
+                    </div>
                 </div>
-                <div class="book-info">
-                    <b>{book.title} </b> {#if book.subtitle} – {book.subtitle} {/if} <br>
-                    {book.author}
-                </div>
-            </div>
-        </a>
-    {/each}
-</div>
-
+            </a>
+        {/each}
+    </div>
+{/if}
 
 
 <style>

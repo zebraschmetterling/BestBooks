@@ -138,11 +138,5 @@
         text-align: center;
         align-items: center;
     }
-    .loading {
-        text-align: center;
-    }
-    .error {
-        text-align: center;
-    }
 
 </style>
